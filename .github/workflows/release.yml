@@ -1,0 +1,33 @@
+name: Release
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+cache-mode: none
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      startsWith(github.event.head_commit.message, 'release: v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci && npm test
+      - run: npm run check:bundle
+      - name: Publish version and advance v3
+        run: node demo/release.mjs --apply
+        env:
+          GH_TOKEN: ${{ github.token }}
