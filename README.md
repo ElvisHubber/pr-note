@@ -34,7 +34,7 @@ jobs:
     if: github.event.issue.pull_request && github.event.comment.user.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
-      - uses: Steve-Glass/pr-note@v3
+      - uses: rsymo/pr-note@v3
         id: note
         with:
           token: ${{ github.token }}
@@ -46,7 +46,7 @@ jobs:
 The consumer owns CLI dependency locking and its independent external firewall
 check. This snippet shows only the Action contract, not the consumer's complete
 controls. The hosted lock-enforcement mismatch is tracked in
-[Steve-Glass/pr-note-consumer#2](https://github.com/Steve-Glass/pr-note-consumer/issues/2);
+[rsymo/pr-note-consumer#2](https://github.com/rsymo/pr-note-consumer/issues/2);
 do not treat CLI validation alone as proof that a hosted run used the locked SHA.
 Use a real authenticated human for comment stimuli: a workflow's `GITHUB_TOKEN`
 generally does not start another workflow.
@@ -141,7 +141,7 @@ start, it cannot also provide checkout/cache-step evidence.
 
 ### Measured release-cache behavior
 
-[The non-publishing rehearsal](https://github.com/Steve-Glass/pr-note/actions/runs/37483252644)
+[The non-publishing rehearsal](https://github.com/rsymo/pr-note/actions/runs/37483252644)
 on October 6 used Node 24, `cache: npm`, and `cache-mode: none`.
 Setup-node emitted an HTTP 403 **`cache read denied: token has no readable scopes`**
 warning; its post step emitted **`cache write denied: token has no writable scopes`**.
@@ -194,14 +194,14 @@ setting. Store receipts at an absolute path **outside the checkout**. See
 [DEMO.md](DEMO.md) for commands and restore boundaries.
 
 The actor policy is an active repository allowlist containing only the resolved
-Steve-Glass User ID `84886334`, targeting **only**
+rsymo User ID `84886334`, targeting **only**
 `.github/workflows/release.yml`. It is not a lint event policy or Maintain-role
 policy. It controls who triggers release, not what allowed code does. Cache
 isolation is independent. A repository allow cannot override a parent deny.
 Do not alter unrelated, platform, organization, or enterprise policies.
 
 The explicit repository policy is active as
-[policy 6432](https://github.com/Steve-Glass/pr-note/settings/actions/rules/6432);
+[policy 6432](https://github.com/rsymo/pr-note/settings/actions/rules/6432);
 its exact target and sole allowed actor were read back on October 6.
 Real fork checkout/default-cache evidence and denial by an otherwise
 eligible second actor remain unrehearsed. Do not grant access, create
